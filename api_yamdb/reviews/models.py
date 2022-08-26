@@ -23,7 +23,7 @@ class User(AbstractUser):
         'Роль пользователя',
         max_length=50,
         default=USER,
-        choices=USER_ROLES
+        choices=USER_ROLES,
     )
 
     email = models.EmailField(

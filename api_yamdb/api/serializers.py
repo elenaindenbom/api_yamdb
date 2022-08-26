@@ -15,6 +15,7 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class TitleSerializer(serializers.ModelSerializer):
+    # сериализатор для POST, PATCH, DEL 
     genre = serializers.SlugRelatedField(
         many=True,
         slug_field='slug'
@@ -22,8 +23,6 @@ class TitleSerializer(serializers.ModelSerializer):
     category = serializers.SlugRelatedField(
         slug_field='slug'
     )
-    # genre = GenreSerializer(many=True)
-    # category = CategorySerializer()
 
     class Meta:
         model = Title
@@ -31,8 +30,33 @@ class TitleSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'year',
-            # 'rating',
             'description',
             'genre',
             'category',
         )
+
+
+class GetTitleSerializer(serializers.ModelSerializer):
+    # сериализатор для GET 
+    # добавляет поле rating — устреднённая оценка пользователей (как получить?)
+    # rating = serializers.IntegerField()
+    genre = serializers.SlugRelatedField(
+        many=True,
+        slug_field='slug'
+    )
+    category = serializers.SlugRelatedField(
+        slug_field='slug'
+    )
+
+    class Meta:
+        model = Title
+        fields = (
+            'id',
+            'name',
+            'year',
+            'rating',
+            'description',
+            'genre',
+            'category',
+        )
+

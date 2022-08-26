@@ -1,5 +1,3 @@
-from pickletools import read_string1
-
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins, viewsets
 from reviews.models import Category, Genre, Title

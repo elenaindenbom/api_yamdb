@@ -1,9 +1,6 @@
 from django.db import models
 
 
-# Create your models here.
-
-
 class Category(models.Model):
     """Категория произведения."""
     name = models.CharField(
@@ -42,20 +39,24 @@ class Title(models.Model):
         verbose_name='Название произведения',
     )
     year = models.IntegerField(
-        verbose_name='Год выпуска',
+        verbose_name='Год выпуска', # год выпуска не может быть больше текущего
     )
     description = models.TextField(
         verbose_name='Описание',
     )
-    genre = models.ManyToManyField(
-        Genre,
+    genre = models.ForeignKey(
+        Genre, # требуется указать уже существующие категорию и жанр
         verbose_name='Жанр',
         related_name='titles',
+        on_delete=models.SET_NULL,
+        null=True, # не нужно удалять связанные с этим жанром произведения
     )
     category = models.ForeignKey(
         Category,
         verbose_name='Категория',
         related_name='titles',
+        on_delete=models.SET_NULL,
+        null=True, # не нужно удалять связанные с этой категорией произведения
     )
 
     def __str__(self) -> str:

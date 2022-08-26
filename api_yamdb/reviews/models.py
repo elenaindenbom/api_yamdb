@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -35,6 +38,7 @@ class Genre(models.Model):
 
 class Title(models.Model):
     """Произведение."""
+
     name = models.CharField(
         verbose_name='Название произведения',
     )
@@ -58,6 +62,10 @@ class Title(models.Model):
         on_delete=models.SET_NULL,
         null=True,  # не нужно удалять связанные с этой категорией произведения
     )
+
+    def year_validation(year):
+        if year > datetime.now().year:
+            raise ValidationError('Год выпуска не может быть в будущем!')
 
     def __str__(self) -> str:
         return self.name

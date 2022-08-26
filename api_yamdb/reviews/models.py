@@ -1,11 +1,9 @@
 from django.db import models
 
-SCORES = [i for i in range(1, 11)]
-
 
 class Review(models.Model):
     text = models.CharField('Текст отзыва', max_length=200)
-    score = models.IntegerField('Оценка', choices=SCORES)
+    score = models.IntegerField('Оценка')
     title = models.ForeignKey(
         Titles,
         on_delete=models.CASCADE,

@@ -1,5 +1,9 @@
+from datetime import datetime
+
+from django.core.exceptions import ValidationError
+from django.db.models import Avg
 from rest_framework import serializers
-from reviews.models import Category, Genre, Title
+from reviews.models import Category, Comment, Genre, Review, Title, User
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -34,12 +38,17 @@ class TitleSerializer(serializers.ModelSerializer):
             'genre',
             'category',
         )
+    
+    def year_validation(self, value):
+        if value > datetime.now().year:
+            raise ValidationError('Год выпуска не может быть в будущем!')
+        return value
 
 
 class GetTitleSerializer(serializers.ModelSerializer):
     # сериализатор для GET 
     # добавляет поле rating — устреднённая оценка пользователей (как получить?)
-    # rating = serializers.IntegerField()
+    rating = serializers.IntegerField()
     genre = serializers.SlugRelatedField(
         many=True,
         slug_field='slug'

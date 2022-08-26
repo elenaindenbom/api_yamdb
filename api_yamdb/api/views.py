@@ -39,6 +39,6 @@ class TitleViewSet(viewsets.ModelViewSet):
     filterset_fields = ('name', 'year', 'genre', 'category')
 
     def get_serializer_class(self):
-        if self.action is 'list' or self.action is 'retrieve':
+        if self.request.method is 'GET':
             return GetTitleSerializer
         return TitleSerializer

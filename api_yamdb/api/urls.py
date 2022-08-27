@@ -20,14 +20,12 @@ v1_router.register(
 )
 v1_router.register('users', UserViewSet, basename='user')
 
+v1_router.register(r'categories', CategoryViewSet, basename='categories')
+v1_router.register(r'genres', GenreViewSet, basename='genres')
+v1_router.register(r'titles', TitleViewSet, basename='titles')
+
 urlpatterns = [
     path('v1/', include(v1_router.urls)),
     path('v1/auth/signup/', UserRegistrationView.as_view(), name='signup'),
     path('v1/auth/token/', UserGetTokenView.as_view(), name='token'),
 ]
-
-
-v1_router = DefaultRouter()
-v1_router.register(r'categories', CategoryViewSet, basename='categories')
-v1_router.register(r'genres', GenreViewSet, basename='genres')
-v1_router.register(r'titles', TitleViewSet, basename='titles')

@@ -99,9 +99,11 @@ class Title(models.Model):
 
     name = models.CharField(
         'Название произведения',
+        max_length=200
     )
     year = models.IntegerField(
         'Год выпуска',
+        null=True
     )
     description = models.TextField(
         'Описание',
@@ -110,17 +112,19 @@ class Title(models.Model):
     )
     genre = models.ManyToManyField(
         Genre,
-        'Жанр',
+        verbose_name='Жанр',
         related_name='titles',
-        on_delete=models.SET_NULL,
+        # on_delete=models.SET_NULL,
+        blank=True,
         null=True,
     )
     category = models.ForeignKey(
         Category,
-        'Категория',
+        verbose_name='Категория',
         related_name='titles',
         on_delete=models.SET_NULL,
         null=True,
+        blank=True,
     )
 
     @property

@@ -85,31 +85,26 @@ class UserGetTokenSerializer(serializers.Serializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = '__all__'
+        exclude = ('id',)
 
 
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
-        fields = '__all__'
+        exclude = ('id',)
 
 
 class TitleSerializer(serializers.ModelSerializer):
     """Сериализатор для POST, PATCH, DEL."""
 
-    def validate_year(self, value):
-        if value > datetime.now().year:
-            raise ValidationError('Год выпуска не может быть в будущем!')
-
     genre = serializers.SlugRelatedField(
         many=True,
-        slug_field='slug'
+        slug_field='slug',
+        queryset=Genre.objects.all()
     )
     category = serializers.SlugRelatedField(
-        slug_field='slug'
-    )
-    year = serializers.IntegerField(
-        validators=[validate_year]
+        slug_field='slug',
+        queryset=Category.objects.all()
     )
 
     class Meta:
@@ -123,18 +118,17 @@ class TitleSerializer(serializers.ModelSerializer):
             'category',
         )
 
+    def validate_year(self, value):
+        if value > datetime.now().year:
+            raise ValidationError('Год выпуска не может быть в будущем!')
+
 
 class GetTitleSerializer(serializers.ModelSerializer):
     """Сериализатор для GET."""
 
     rating = serializers.IntegerField()
-    genre = serializers.SlugRelatedField(
-        many=True,
-        slug_field='slug'
-    )
-    category = serializers.SlugRelatedField(
-        slug_field='slug'
-    )
+    genre = GenreSerializer(many=True)
+    category = CategorySerializer()
 
     class Meta:
         model = Title

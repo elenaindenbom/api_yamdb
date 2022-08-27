@@ -1,5 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins, viewsets
+from rest_framework.pagination import LimitOffsetPagination
 from reviews.models import Category, Genre, Title
 
 from .permissions import AdminOrReadOnly
@@ -20,6 +21,7 @@ class CategoryViewSet(viewsets.ListCreateDeleteViewSet):
     permission_classes = [AdminOrReadOnly]
     filter_backends = [filters.SearchFilter]
     search_fields = ('=name',)
+    pagination_class = LimitOffsetPagination
 
 
 class GenreViewSet(viewsets.ListCreateDeleteViewSet):
@@ -28,6 +30,7 @@ class GenreViewSet(viewsets.ListCreateDeleteViewSet):
     permission_classes = [AdminOrReadOnly]
     filter_backends = [filters.SearchFilter]
     search_fields = ('=name',)
+    pagination_class = LimitOffsetPagination
 
 
 class TitleViewSet(viewsets.ModelViewSet):
@@ -37,6 +40,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     permission_classes = [AdminOrReadOnly]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ('name', 'year', 'genre', 'category')
+    pagination_class = LimitOffsetPagination
 
     def get_serializer_class(self):
         if self.request.method is 'GET':

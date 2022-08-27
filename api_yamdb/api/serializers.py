@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404
 from reviews.models import Comment, Review, Title
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
 
 
 class ReviewSerializer(serializers.ModelSerializer):

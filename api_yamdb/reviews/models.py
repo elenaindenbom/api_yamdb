@@ -1,19 +1,17 @@
-from datetime import datetime
-
-from django.core.exceptions import ValidationError
 from django.db import models
 
 
 class Category(models.Model):
     """Категория произведения."""
+
     name = models.CharField(
+        'Название категории',
         max_length=256,
-        verbose_name='Название категории'
     )
     slug = models.SlugField(
+        'Slug категории',
         max_length=50,
         unique=True,
-        verbose_name='Slug категории'
     )
 
     def __str__(self) -> str:
@@ -22,14 +20,15 @@ class Category(models.Model):
 
 class Genre(models.Model):
     """Жанр произведения."""
+
     name = models.CharField(
+        'Название жанра',
         max_length=256,
-        verbose_name='Название жанра'
     )
     slug = models.SlugField(
+        'Slug жанра',
         max_length=50,
         unique=True,
-        verbose_name='Slug жанра'
     )
 
     def __str__(self) -> str:
@@ -38,37 +37,39 @@ class Genre(models.Model):
 
 class Title(models.Model):
     """Произведение."""
+
     name = models.CharField(
-        verbose_name='Название произведения',
+        'Название произведения',
     )
     year = models.IntegerField(
-        verbose_name='Год выпуска',  # год выпуска не может быть больше текущего
+        'Год выпуска',
     )
     description = models.TextField(
-        verbose_name='Описание',
+        'Описание',
+        blank=True,
+        null=True,
     )
     genre = models.ManyToManyField(
-        Genre,  # требуется указать уже существующие категорию и жанр
-        verbose_name='Жанр',
+        Genre,
+        'Жанр',
         related_name='titles',
         on_delete=models.SET_NULL,
-        null=True,  # не нужно удалять связанные с этим жанром произведения
+        null=True,
     )
     category = models.ForeignKey(
         Category,
-        verbose_name='Категория',
+        'Категория',
         related_name='titles',
         on_delete=models.SET_NULL,
-        null=True,  # не нужно удалять связанные с этой категорией произведения
+        null=True,
     )
 
     @property
     def rating(self):
-        return self.reviews.all().aggregate(rating=models.Avg('score')).get('rating')
+        """Формирует усреднённую оценку пользователей."""
 
-    def year_validation(self, value):
-        if value > datetime.now().year:
-            raise ValidationError('Год выпуска не может быть в будущем!')
+        return (self.reviews.all().aggregate(
+            rating=models.Avg('score')).get('rating'))
 
     def __str__(self) -> str:
         return self.name

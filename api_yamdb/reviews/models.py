@@ -1,4 +1,48 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+
+class User(AbstractUser):
+    """Пользователь."""
+
+    USER = 'user'
+    MODERATOR = 'moderator'
+    ADMIN = 'admin'
+
+    USER_ROLES = [
+        (MODERATOR, 'Модератор'),
+        (ADMIN, 'Администратор'),
+        (USER, 'Пользователь'),
+    ]
+
+    bio = models.TextField(
+        'Биография',
+        blank=True,
+        null=True
+    )
+
+    role = models.CharField(
+        'Роль пользователя',
+        max_length=50,
+        default=USER,
+        choices=USER_ROLES,
+    )
+
+    email = models.EmailField(
+        'Почта',
+        unique=True
+    )
+
+    def __str__(self):
+        return self.username
+
+    @property
+    def is_admin(self):
+        return self.role == self.ADMIN
+
+    @property
+    def is_moderator(self):
+        return self.role == self.MODERATOR
 
 
 class Category(models.Model):

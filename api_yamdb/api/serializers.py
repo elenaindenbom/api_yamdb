@@ -111,23 +111,22 @@ class TitleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Title
         fields = (
-            "id",
-            "name",
-            "year",
-            "description",
-            "genre",
-            "category",
+            'id',
+            'name',
+            'year',
+            'description',
+            'genre',
+            'category',
         )
-
-    def validate_year(self, value):
-        if value > datetime.now().year:
-            raise ValidationError('Год выпуска не может быть в будущем!')
 
 
 class GetTitleSerializer(serializers.ModelSerializer):
     """Сериализатор для GET."""
 
-    rating = serializers.IntegerField()
+    rating = serializers.IntegerField(
+        read_only=True,
+        source='reviews__score__avg',
+    )
     genre = GenreSerializer(many=True)
     category = CategorySerializer()
 

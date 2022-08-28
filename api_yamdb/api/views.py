@@ -1,5 +1,6 @@
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
+from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins, permissions, status, viewsets
@@ -10,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from reviews.models import Category, Genre, Review, Title, User
 
+from .filters import TitlesFilter
 from .permissions import (AdminOrReadOnly, AdminPermission,
                           AuthorAdminModerOrReadOnly)
 from .serializers import (CategorySerializer, CommentSerializer,
@@ -128,6 +130,7 @@ class CategoryViewSet(ListCreateDeleteViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = ('name',)
     lookup_field = 'slug'
+    pagination_class = LimitOffsetPagination
 
 
 class GenreViewSet(ListCreateDeleteViewSet):
@@ -137,16 +140,19 @@ class GenreViewSet(ListCreateDeleteViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = ('name',)
     lookup_field = 'slug'
+    pagination_class = LimitOffsetPagination
+
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all()
+    queryset = Title.objects.all().annotate(Avg('reviews__score'))
     serializer_class = TitleSerializer
     permission_classes = [AdminOrReadOnly]
+    pagination_class = LimitOffsetPagination
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ('name', 'year', 'genre', 'category')
+    filterset_class = TitlesFilter
 
     def get_serializer_class(self):
-        if self.request.method is 'GET':
+        if self.action in ('retrieve', 'list'):
             return GetTitleSerializer
         return TitleSerializer

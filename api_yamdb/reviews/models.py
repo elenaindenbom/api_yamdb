@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from .validators import validate_year
+
 USER = 'user'
 MODERATOR = 'moderator'
 ADMIN = 'admin'
@@ -104,6 +106,7 @@ class Title(models.Model):
     year = models.IntegerField(
         'Год выпуска',
         null=True,
+        validators=(validate_year,)
     )
     description = models.TextField(
         'Описание',
@@ -125,13 +128,6 @@ class Title(models.Model):
         on_delete=models.SET_NULL,
         null=True,
     )
-
-    @property
-    def rating(self):
-        """Формирует усреднённую оценку пользователей."""
-
-        return (self.reviews.all().aggregate(
-            rating=models.Avg('score')).get('rating'))
 
     def __str__(self) -> str:
         return self.name

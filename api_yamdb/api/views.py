@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from reviews.models import Category, Genre, Review, Title, User
 
-from .filters import TitlesFilter
+from .filters import TitleFilter
 from .permissions import (AdminOrReadOnly, AdminPermission,
                           AuthorAdminModerOrReadOnly)
 from .serializers import (CategorySerializer, CommentSerializer,
@@ -150,7 +150,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     permission_classes = [AdminOrReadOnly]
     pagination_class = LimitOffsetPagination
     filter_backends = [DjangoFilterBackend]
-    filterset_class = TitlesFilter
+    filterset_class = TitleFilter
 
     def get_serializer_class(self):
         if self.action in ('retrieve', 'list'):

@@ -103,7 +103,7 @@ class Title(models.Model):
     )
     year = models.IntegerField(
         'Год выпуска',
-        null=True
+        null=True,
     )
     description = models.TextField(
         'Описание',
@@ -124,7 +124,6 @@ class Title(models.Model):
         related_name='titles',
         on_delete=models.SET_NULL,
         null=True,
-        blank=True,
     )
 
     @property

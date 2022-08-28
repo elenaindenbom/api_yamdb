@@ -1,26 +1,22 @@
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, status, viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, mixins, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from reviews.models import Review, Title, User
+from reviews.models import Category, Genre, Review, Title, User
 
-from .permissions import AdminPermission, AuthorAdminModerOrReadOnly
-from .serializers import (CommentSerializer, ReviewSerializer,
+from .permissions import (AdminOrReadOnly, AdminPermission,
+                          AuthorAdminModerOrReadOnly)
+from .serializers import (CategorySerializer, CommentSerializer,
+                          GenreSerializer, GetTitleSerializer,
+                          ReviewSerializer, TitleSerializer,
                           UserGetTokenSerializer, UserRegistrationSerializer,
                           UserSerializer)
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, mixins, viewsets
-from rest_framework.pagination import LimitOffsetPagination
-from reviews.models import Category, Genre, Title
-
-from .permissions import AdminOrReadOnly
-from .serializers import (CategorySerializer, GenreSerializer,
-                          GetTitleSerializer, TitleSerializer)
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
@@ -121,8 +117,7 @@ class ListCreateDeleteViewSet(
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
     mixins.DestroyModelMixin,
-    viewsets.GenericViewSet
-):
+    viewsets.GenericViewSet):
     pass
 
 
@@ -131,8 +126,8 @@ class CategoryViewSet(ListCreateDeleteViewSet):
     serializer_class = CategorySerializer
     permission_classes = [AdminOrReadOnly]
     filter_backends = [filters.SearchFilter]
-    search_fields = ('=name',)
-    # pagination_class = LimitOffsetPagination
+    search_fields = ('name',)
+    lookup_field = 'slug'
 
 
 class GenreViewSet(ListCreateDeleteViewSet):
@@ -140,18 +135,16 @@ class GenreViewSet(ListCreateDeleteViewSet):
     serializer_class = GenreSerializer
     permission_classes = [AdminOrReadOnly]
     filter_backends = [filters.SearchFilter]
-    search_fields = ('=name',)
-    # pagination_class = LimitOffsetPagination
+    search_fields = ('name',)
+    lookup_field = 'slug'
 
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
-    # serializer_class = TitleSerializer или GetTitleSerializer
-    # https://stackoverflow.com/questions/22616973/django-rest-framework-use-different-serializers-in-the-same-modelviewset
+    serializer_class = TitleSerializer
     permission_classes = [AdminOrReadOnly]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ('name', 'year', 'genre', 'category')
-    # pagination_class = LimitOffsetPagination
 
     def get_serializer_class(self):
         if self.request.method is 'GET':

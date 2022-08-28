@@ -1,9 +1,7 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import serializers
-from reviews.models import Comment, Review, Title, User
 from datetime import datetime
 
 from django.core.exceptions import ValidationError
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from reviews.models import Category, Comment, Genre, Review, Title, User
 
@@ -86,12 +84,15 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         exclude = ('id',)
+        lookup_field = 'slug'
+        extra_kwargs = {'url': {'lookup_field': 'slug'}}
 
 
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
         exclude = ('id',)
+        lookup_field = 'slug'
 
 
 class TitleSerializer(serializers.ModelSerializer):
@@ -110,12 +111,12 @@ class TitleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Title
         fields = (
-            'id',
-            'name',
-            'year',
-            'description',
-            'genre',
-            'category',
+            "id",
+            "name",
+            "year",
+            "description",
+            "genre",
+            "category",
         )
 
     def validate_year(self, value):

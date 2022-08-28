@@ -1,26 +1,22 @@
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, status, viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, mixins, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from reviews.models import Review, Title, User
+from reviews.models import Category, Genre, Review, Title, User
 
-from .permissions import AdminPermission, AuthorAdminModerOrReadOnly
-from .serializers import (CommentSerializer, ReviewSerializer,
+from .permissions import (AdminOrReadOnly, AdminPermission,
+                          AuthorAdminModerOrReadOnly)
+from .serializers import (CategorySerializer, CommentSerializer,
+                          GenreSerializer, GetTitleSerializer,
+                          ReviewSerializer, TitleSerializer,
                           UserGetTokenSerializer, UserRegistrationSerializer,
                           UserSerializer)
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, mixins, viewsets
-from rest_framework.pagination import LimitOffsetPagination
-from reviews.models import Category, Genre, Title
-
-from .permissions import AdminOrReadOnly
-from .serializers import (CategorySerializer, GenreSerializer,
-                          GetTitleSerializer, TitleSerializer)
 
 
 class ReviewViewSet(viewsets.ModelViewSet):

@@ -119,7 +119,8 @@ class ListCreateDeleteViewSet(
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
     mixins.DestroyModelMixin,
-    viewsets.GenericViewSet):
+    viewsets.GenericViewSet
+):
     pass
 
 
@@ -141,7 +142,6 @@ class GenreViewSet(ListCreateDeleteViewSet):
     search_fields = ('name',)
     lookup_field = 'slug'
     pagination_class = LimitOffsetPagination
-
 
 
 class TitleViewSet(viewsets.ModelViewSet):

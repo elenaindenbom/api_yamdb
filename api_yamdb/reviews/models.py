@@ -114,7 +114,6 @@ class Title(models.Model):
         Genre,
         verbose_name='Жанр',
         related_name='titles',
-        # on_delete=models.SET_NULL,
         blank=True,
         null=True,
     )

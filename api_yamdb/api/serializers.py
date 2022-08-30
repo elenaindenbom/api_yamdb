@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 from reviews.models import Category, Comment, Genre, Review, Title, User
 
 
@@ -62,6 +63,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('username', 'email')
         model = User
+
+        validators = [
+            UniqueTogetherValidator(
+                queryset=User.objects.all(),
+                fields=('username', 'email')
+            )
+        ]
 
     def validate_username(self, value):
         if value == 'me':

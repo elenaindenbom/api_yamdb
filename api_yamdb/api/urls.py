@@ -26,6 +26,8 @@ v1_router.register(
 
 urlpatterns = [
     path('v1/', include(v1_router.urls)),
-    path('v1/auth/signup/', UserRegistrationView.as_view(), name='signup'),
-    path('v1/auth/token/', UserGetTokenView.as_view(), name='token'),
+    path('v1/auth/', include([
+        path('signup/', UserRegistrationView.as_view(), name='signup'),
+        path('token/', UserGetTokenView.as_view(), name='token'),
+    ])),
 ]

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from reviews.models import User
-
+from rest_framework.validators import UniqueTogetherValidator
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,6 +21,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('username', 'email')
         model = User
+
+        validators = [
+            UniqueTogetherValidator(
+                queryset=User.objects.all(),
+                fields=('username', 'email')
+            )
+        ]
 
     def validate_username(self, value):
         if value == 'me':

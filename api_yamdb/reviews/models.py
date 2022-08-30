@@ -4,18 +4,17 @@ from django.db import models
 
 from .validators import validate_year
 
-USER = 'user'
-MODERATOR = 'moderator'
-ADMIN = 'admin'
-
-USER_ROLES = [
-    (MODERATOR, 'Модератор'),
-    (ADMIN, 'Администратор'),
-    (USER, 'Пользователь'),
-]
-
 
 class User(AbstractUser):
+    USER = 'user'
+    MODERATOR = 'moderator'
+    ADMIN = 'admin'
+
+    USER_ROLES = [
+        (MODERATOR, 'Модератор'),
+        (ADMIN, 'Администратор'),
+        (USER, 'Пользователь'),
+    ]
 
     username = models.CharField(
         verbose_name='Имя пользователя',
@@ -48,15 +47,15 @@ class User(AbstractUser):
 
     @property
     def is_admin(self):
-        return self.role == ADMIN
+        return self.role == self.ADMIN
 
     @property
     def is_moderator(self):
-        return self.role == MODERATOR
+        return self.role == self.MODERATOR
 
     @property
     def is_user(self):
-        return self.role == USER
+        return self.role == self.USER
 
     def __str__(self):
         return self.username

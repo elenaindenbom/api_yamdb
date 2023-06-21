@@ -1,28 +1,8 @@
 # **Api_YaMDb**
 
-## Авторы проекта
----
+Групповой проект при обучении в Яндекс.Практикуме.
 
-https://github.com/elenaindenbom
-
-https://github.com/KunAgueroAgness
-
-https://github.com/Timur-Perevozchikov
-
----
-
-### _Технологии_
-```
-- requests 2.26.0
-- django 2.2.16
-- djangorestframework 3.12.4
-- PyJWT 2.1.0
-- pytest 6.2.4
-- pytest-django 4.4.0
-- pytest-pythonpath 0.7.3
-- djangorestframework-simplejwt 5.1.0
-- django-filter 21.1
-```
+Проект реализован на `Django` и `DjangoRestFramework`. Доступ к данным реализован через API-интерфейс.
 
 ### _Описание проекта_
 Проект YaMDb собирает отзывы (Review) пользователей на произведения (Titles). Произведения делятся на категории: «Книги», «Фильмы», «Музыка». Список категорий (Category) может быть расширен администратором.
@@ -102,5 +82,29 @@ _*  в Windows вместо команды "python3" использовать "p
 
 ---
 после запуска проекта, по адресу http://127.0.0.1:8000/redoc/ будет доступна документация ReDoc для API Yatube.В ней описаны возможные запросы к API и структура ожидаемых ответов. Для каждого запроса указаны уровни прав доступа: пользовательские роли, которым разрешён запрос.
+
+---
+
+### _Зависимости_
+```
+- requests 2.26.0
+- django 2.2.16
+- djangorestframework 3.12.4
+- PyJWT 2.1.0
+- pytest 6.2.4
+- pytest-django 4.4.0
+- pytest-pythonpath 0.7.3
+- djangorestframework-simplejwt 5.1.0
+- django-filter 21.1
+```
+
+## Авторы проекта
+---
+
+https://github.com/elenaindenbom
+
+https://github.com/KunAgueroAgness
+
+https://github.com/Timur-Perevozchikov
 
 ---
